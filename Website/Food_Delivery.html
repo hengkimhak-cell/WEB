@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Food Delivery Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#228B22',
+                        secondary: '#32CD32',
+                        accent: '#90EE90',
+                        dark: '#006400',
+                        light: '#f8f9fa',
+                        gradientStart: '#228B22',
+                        gradientEnd: '#32CD32'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fb;
+            scroll-behavior: smooth;
+        }
+        .nav-link:hover {
+            color: #228B22;
+            transition: color 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .dashboard-card {
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-header {
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        .section-header:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #228B22, #32CD32);
+            border-radius: 2px;
+        }
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15);
+        }
+        .stats-card {
+            transition: transform 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: scale(1.05);
+        }
+        .pricing-card {
+            transition: all 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        .active-page {
+            border-bottom: 3px solid #228B22 !important;
+            color: #228B22 !important;
+        }
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        .feature-icon:hover {
+            transform: scale(1.1);
+        }
+        .feature-item {
+            transition: all 0.2s ease;
+        }
+        .feature-item:hover {
+            background-color: #f0fff0;
+            padding-left: 1rem;
+        }
+        /* Mobile nav styles */
+        .mobile-menu {
+            display: none;
+        }
+        .mobile-menu.active {
+            display: block;
+        }
+        /* Form styles */
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            max-width: 450px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .form-header {
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .form-body {
+            padding: 2rem;
+        }
+        .form-footer {
+            padding: 1rem 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e5e7eb;
+        }
+        .form-switcher {
+            cursor: pointer;
+            color: #228B22;
+            font-weight: 600;
+        }
+        .form-switcher:hover {
+            text-decoration: underline;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #228B22;
+            box-shadow: 0 0 0 3px rgba(34, 139, 34, 0.1);
+        }
+        .form-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            color: #228B22;
+            border-bottom: 3px solid #228B22;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6b7280;
+        }
+        .transparent-pricing-form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #228B22;
+            box-shadow: 0 0 0 3px rgba(34, 139, 34, 0.1);
+        }
+        .price-range-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .price-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #228B22;
+            cursor: pointer;
+        }
+        .price-display {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #228B22;
+            margin: 1rem 0;
+        }
+        .free-form-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .free-form-input {
+            width: 100%;
+            max-width: 200px;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .price-indicator {
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        /* Mobile menu button animation */
+        .menu-button {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .menu-button:hover {
+            transform: scale(1.1);
+        }
+        .menu-button span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background-color: #374151;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        .menu-button.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .menu-button.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-button.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        /* Animated mobile menu */
+        .mobile-menu-content {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mobile-menu-content li {
+            animation: fadeInUp 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .mobile-menu-content li:nth-child(1) { animation-delay: 0.1s; }
+        .mobile-menu-content li:nth-child(2) { animation-delay: 0.2s; }
+        .mobile-menu-content li:nth-child(3) { animation-delay: 0.3s; }
+        .mobile-menu-content li:nth-child(4) { animation-delay: 0.4s; }
+        .mobile-menu-content li:nth-child(5) { animation-delay: 0.5s; }
+        .mobile-menu-content li:nth-child(6) { animation-delay: 0.6s; }
+        .mobile-menu-content li:nth-child(7) { animation-delay: 0.7s; }
+        .mobile-menu-content li:nth-child(8) { animation-delay: 0.8s; }
+        .mobile-menu-content li:nth-child(9) { animation-delay: 0.9s; }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Improved mobile menu alignment */
+        .mobile-menu {
+            display: none;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            width: 100%;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 50;
+        }
+        .mobile-menu.active {
+            display: block;
+        }
+        .mobile-menu-content {
+            padding: 1rem 0;
+        }
+        .mobile-menu-content li {
+            list-style: none;
+            padding: 0.75rem 1rem;
+        }
+        .mobile-menu-content li a {
+            display: block;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .mobile-menu-content li a:hover {
+            background-color: #f0fdf4;
+            color: #228B22;
+        }
+        /* Enhanced login/register buttons with animation */
+        .auth-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .auth-btn {
+            animation: bounceIn 0.6s ease-out;
+            transform-origin: center;
+        }
+        .login-btn {
+            animation-delay: 0.1s;
+        }
+        .register-btn {
+            animation-delay: 0.2s;
+        }
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-utensils text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-dark">FoodDeliver</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:space-x-8 desktop-nav">
+                    <button onclick="showPage('home')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium active-page">Home</button>
+                    <button onclick="showPage('features')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Features</button>
+                    <button onclick="showPage('modules')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Modules</button>
+                    <button onclick="showPage('pricing')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Pricing</button>
+                    <button onclick="showPage('testimonials')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Testimonials</button>
+                    <button onclick="showPage('about')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">About</button>
+                    <button onclick="showPage('contact')" class="nav-link inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact</button>
+                </div>
+                <div class="flex items-center">
+                    <div class="auth-buttons">
+                        <button onclick="showPage('login')" class="login-btn auth-btn hidden md:block text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Login</button>
+                        <button onclick="showPage('register')" class="register-btn auth-btn bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition">Register</button>
+                    </div>
+                    <div class="md:hidden ml-4 menu-button" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu bg-white border-t">
+            <ul class="mobile-menu-content">
+                <li><button onclick="showPage('home'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Home</button></li>
+                <li><button onclick="showPage('features'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Features</button></li>
+                <li><button onclick="showPage('modules'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Modules</button></li>
+                <li><button onclick="showPage('pricing'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Pricing</button></li>
+                <li><button onclick="showPage('testimonials'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Testimonials</button></li>
+                <li><button onclick="showPage('about'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">About</button></li>
+                <li><button onclick="showPage('contact'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Contact</button></li>
+                <li><button onclick="showPage('login'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Login</button></li>
+                <li><button onclick="showPage('register'); toggleMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Register</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-gradient-to-r from-primary to-secondary text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6 animate-fade-in">
+                        Complete <span class="text-accent">Food Delivery</span> Management Solution
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90 animate-fade-in delay-100">
+                        Streamline your restaurant operations, manage deliveries, and provide exceptional customer experience with our comprehensive platform.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in delay-200">
+                        <button onclick="showPage('features')" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold text-lg hover:shadow-lg transition-all">
+                            Explore Features
+                        </button>
+                        <button onclick="showPage('register')" class="bg-white text-primary px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all">
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-center animate-fade-in delay-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Food Delivery Interface" class="rounded-xl shadow-2xl w-full max-w-md">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent rounded-xl opacity-20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Page -->
+    <section id="login" class="py-20 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2 class="text-2xl font-bold">Welcome Back</h2>
+                    <p class="opacity-90 mt-2">Sign in to continue to your account</p>
+                </div>
+                <div class="form-body">
+                    <form id="loginForm">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Email Address</label>
+                            <input type="email" id="login-email" class="form-input" placeholder="Enter your email">
+                            <div id="login-email-error" class="error-message">Please enter a valid email address</div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="login-password" class="form-input" placeholder="Enter your password">
+                                <span class="password-toggle" onclick="togglePasswordVisibility('login-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div id="login-password-error" class="error-message">Password must be at least 6 characters</div>
+                        </div>
+                        <button type="submit" class="form-button">Sign In</button>
+                    </form>
+                </div>
+                <div class="form-footer">
+                    <p>Don't have an account? <span onclick="showPage('register')" class="form-switcher">Register here</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Page -->
+    <section id="register" class="py-20 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2 class="text-2xl font-bold">Create Account</h2>
+                    <p class="opacity-90 mt-2">Join our food delivery platform today</p>
+                </div>
+                <div class="form-body">
+                    <form id="registerForm">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+                            <input type="text" id="register-name" class="form-input" placeholder="Enter your full name">
+                            <div id="register-name-error" class="error-message">Please enter your full name</div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Email Address</label>
+                            <input type="email" id="register-email" class="form-input" placeholder="Enter your email">
+                            <div id="register-email-error" class="error-message">Please enter a valid email address</div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="register-password" class="form-input" placeholder="Create a password">
+                                <span class="password-toggle" onclick="togglePasswordVisibility('register-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div id="register-password-error" class="error-message">Password must be at least 6 characters</div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Confirm Password</label>
+                            <div class="relative">
+                                <input type="password" id="register-confirm-password" class="form-input" placeholder="Confirm your password">
+                                <span class="password-toggle" onclick="togglePasswordVisibility('register-confirm-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div id="register-confirm-password-error" class="error-message">Passwords do not match</div>
+                        </div>
+                        <button type="submit" class="form-button">Create Account</button>
+                    </form>
+                </div>
+                <div class="form-footer">
+                    <p>Already have an account? <span onclick="showPage('login')" class="form-switcher">Sign in here</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center stats-card">
+                    <div class="text-4xl font-bold text-primary mb-2">500+</div>
+                    <div class="text-gray-600">Restaurants</div>
+                </div>
+                <div class="text-center stats-card">
+                    <div class="text-4xl font-bold text-secondary mb-2">10K+</div>
+                    <div class="text-gray-600">Happy Customers</div>
+                </div>
+                <div class="text-center stats-card">
+                    <div class="text-4xl font-bold text-accent mb-2">5000+</div>
+                    <div class="text-gray-600">Daily Orders</div>
+                </div>
+                <div class="text-center stats-card">
+                    <div class="text-4xl font-bold text-dark mb-2">99%</div>
+                    <div class="text-gray-600">Uptime</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark section-header">Powerful Features for All Users</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-4">
+                    Our platform provides comprehensive tools for customers, restaurants, delivery staff, and administrators to streamline food delivery operations.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Customer Features -->
+                <div class="feature-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mb-4 feature-icon">
+                        <i class="fas fa-user text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">Customer Portal</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Register & Login</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Browse Restaurants</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Order Management</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Track Orders</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Payment Options</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Favorites & History</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i> Reviews & Ratings</li>
+                    </ul>
+                </div>
+
+                <!-- Restaurant Features -->
+                <div class="feature-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-4 feature-icon">
+                        <i class="fas fa-utensils text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">Restaurant Management</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Profile Management</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Menu Creation</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Order Handling</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Status Updates</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Analytics</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Staff Management</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-secondary mt-1 mr-2"></i> Promotions</li>
+                    </ul>
+                </div>
+
+                <!-- Delivery Features -->
+                <div class="feature-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-4 feature-icon">
+                        <i class="fas fa-motorcycle text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">Delivery Management</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Job Assignment</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Location Tracking</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Status Updates</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Delivery Confirmation</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Performance Metrics</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Route Optimization</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-accent mt-1 mr-2"></i> Communication Tools</li>
+                    </ul>
+                </div>
+
+                <!-- Admin Features -->
+                <div class="feature-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="w-12 h-12 bg-dark rounded-full flex items-center justify-center mb-4 feature-icon">
+                        <i class="fas fa-user-shield text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark mb-3">Admin Control</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> User Management</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> Restaurant Approval</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> Order Monitoring</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> Revenue Reports</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> System Analytics</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> Settings Management</li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle text-dark mt-1 mr-2"></i> Security Controls</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section id="modules" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark section-header">System Modules</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-4">
+                    Comprehensive modules designed to manage every aspect of food delivery operations effectively.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="dashboard-card bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-users text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-dark">User Management</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Handle user registration, authentication, and role-based access control.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded">Authentication</span>
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Authorization</span>
+                        <span class="bg-accent text-dark text-xs px-2 py-1 rounded">Roles</span>
+                        <span class="bg-dark text-white text-xs px-2 py-1 rounded">Permissions</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-utensils text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-dark">Restaurant Management</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Manage restaurant profiles, categories, and operational settings.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded">Profiles</span>
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Categories</span>
+                        <span class="bg-accent text-dark text-xs px-2 py-1 rounded">Settings</span>
+                        <span class="bg-dark text-white text-xs px-2 py-1 rounded">Staff</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-list text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-dark">Menu Management</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Create, update, and organize menu items with images and pricing.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded">Items</span>
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Images</span>
+                        <span class="bg-accent text-dark text-xs px-2 py-1 rounded">Pricing</span>
+                        <span class="bg-dark text-white text-xs px-2 py-1 rounded">Availability</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-dark rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-shopping-cart text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-dark">Order Management</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Track, process, and manage all orders through their lifecycle.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded">Tracking</span>
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Status</span>
+                        <span class="bg-accent text-dark text-xs px-2 py-1 rounded">History</span>
+                        <span class="bg-dark text-white text-xs px-2 py-1 rounded">Notifications</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-motorcycle text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-dark">Delivery Management</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Assign and track delivery jobs with real-time location updates.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded">Assignment</span>
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Tracking</span>
+                        <span class="bg-accent text-dark text-xs px-2 py-1 rounded">Updates</span>
+                        <span class="bg-dark text-white text-xs px-2 py-1 rounded">Payment</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-chart-line text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-dark">Analytics & Reporting</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        Generate comprehensive reports and analyze business performance.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded">Revenue</span>
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded">Performance</span>
+                        <span class="bg-accent text-dark text-xs px-2 py-1 rounded">Reports</span>
+                        <span class="bg-dark text-white text-xs px-2 py-1 rounded">Insights</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark section-header">Simple, Transparent Pricing</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-4">
+                    Choose the plan that works best for your business. All plans include core features.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Basic Plan -->
+                <div class="pricing-card bg-white p-8 rounded-xl shadow-lg border border-gray-100 text-center">
+                    <h3 class="text-2xl font-bold text-dark mb-4">Starter</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-primary">$29</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-gray-600">
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Up to 5 Restaurants</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Basic Analytics</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> 1000 Orders/Month</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Email Support</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-times-circle text-red-400 mr-2"></i> Advanced Features</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-times-circle text-red-400 mr-2"></i> Priority Support</li>
+                    </ul>
+                    <button class="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card bg-white p-8 rounded-xl shadow-lg border-2 border-primary text-center relative">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-white px-4 py-1 rounded-full text-sm font-bold">
+                        MOST POPULAR
+                    </div>
+                    <h3 class="text-2xl font-bold text-dark mb-4">Professional</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-primary">$79</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-gray-600">
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Up to 20 Restaurants</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Advanced Analytics</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> 5000 Orders/Month</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Priority Support</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Advanced Features</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-times-circle text-red-400 mr-2"></i> Custom Integrations</li>
+                    </ul>
+                    <button class="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card bg-white p-8 rounded-xl shadow-lg border border-gray-100 text-center">
+                    <h3 class="text-2xl font-bold text-dark mb-4">Enterprise</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-primary">$199</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-gray-600">
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Unlimited Restaurants</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Premium Analytics</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Unlimited Orders</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> 24/7 Support</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Advanced Features</li>
+                        <li class="flex items-center justify-center"><i class="fas fa-check-circle text-primary mr-2"></i> Custom Integrations</li>
+                    </ul>
+                    <button class="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Free Form Pricing Section -->
+            <div class="mt-20">
+                <h2 class="text-3xl font-bold text-dark text-center mb-8">Custom Pricing Request</h2>
+                <div class="transparent-pricing-form">
+                    <h3 class="text-xl font-semibold text-dark mb-6 text-center">Request Your Custom Pricing</h3>
+                    <form id="customPricingForm">
+                        <div class="form-group">
+                            <label for="businessSize">Business Size</label>
+                            <select id="businessSize" class="form-control">
+                                <option value="">Select size</option>
+                                <option value="small">Small Business (1-5 restaurants)</option>
+                                <option value="medium">Medium Business (6-20 restaurants)</option>
+                                <option value="large">Large Business (20+ restaurants)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="monthlyOrders">Expected Monthly Orders</label>
+                            <input type="range" id="monthlyOrders" min="0" max="10000" step="100" class="price-range-slider">
+                            <div class="price-display" id="ordersDisplay">0 orders/month</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="featuresRequired">Additional Features Required</label>
+                            <select id="featuresRequired" class="form-control">
+                                <option value="">Select features</option>
+                                <option value="analytics">Advanced Analytics</option>
+                                <option value="delivery">Delivery Optimization</option>
+                                <option value="integrations">Custom Integrations</option>
+                                <option value="support">Priority Support</option>
+                                <option value="all">All Features</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalInfo">Additional Information</label>
+                            <textarea id="additionalInfo" rows="4" class="form-control" placeholder="Tell us more about your requirements..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactEmail">Contact Email</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="your@email.com">
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                            Get Custom Pricing Quote
+                        </button>
+                    </form>
+                    
+                    <div class="mt-8">
+                        <div class="price-indicator">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            For custom pricing based on your specific requirements, please fill out the form above
+                        </div>
+                        <div class="free-form-container">
+                            <span class="text-gray-600">Or request free pricing:</span>
+                            <input type="number" min="0" placeholder="Enter amount" class="free-form-input">
+                            <button class="btn-primary text-white px-4 py-2 rounded-lg">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark section-header">What Our Customers Say</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-4">
+                    Don't just take our word for it. Here's what our satisfied customers have to say.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            SM
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-dark">Sarah Miller</h4>
+                            <p class="text-gray-600 text-sm">Restaurant Owner</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "This platform has transformed how we manage our restaurant orders. The efficiency improvements have saved us countless hours each week!"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            RJ
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-dark">Robert Johnson</h4>
+                            <p class="text-gray-600 text-sm">Delivery Driver</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "As a delivery driver, I appreciate the clear route optimization and real-time tracking. It makes my job much easier and more efficient."
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            EP
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-dark">Emily Parker</h4>
+                            <p class="text-gray-600 text-sm">Customer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "The ordering process is so smooth and fast. I love being able to track my order in real-time. Great customer service too!"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-dark mb-6">Comprehensive Food Delivery Solution</h2>
+                    <p class="text-gray-600 mb-6">
+                        Our Food Delivery Management System is designed to meet the needs of modern restaurants, delivery services, 
+                        and customers with an intuitive interface and robust backend support.
+                    </p>
+                    <p class="text-gray-600 mb-8">
+                        Built with scalability in mind, this platform handles everything from user management and order processing 
+                        to analytics and reporting. Whether you're a restaurant owner, delivery driver, or admin, 
+                        you'll find all the tools necessary for efficient food delivery operations.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary rounded-lg p-3 mr-4">
+                                <i class="fas fa-mobile-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Responsive Design</h4>
+                                <p class="text-gray-600 text-sm">Works seamlessly on all devices</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-secondary rounded-lg p-3 mr-4">
+                                <i class="fas fa-shield-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Secure Platform</h4>
+                                <p class="text-gray-600 text-sm">Enterprise-grade security measures</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-accent rounded-lg p-3 mr-4">
+                                <i class="fas fa-sync-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Real-time Updates</h4>
+                                <p class="text-gray-600 text-sm">Instant notifications and tracking</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-dark rounded-lg p-3 mr-4">
+                                <i class="fas fa-chart-bar text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-dark">Data Analytics</h4>
+                                <p class="text-gray-600 text-sm">Actionable insights for growth</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1543322523-c52d00de8d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Dashboard Interface" class="rounded-xl shadow-2xl w-full max-w-md">
+                    <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg w-64">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold text-dark">Active Orders</span>
+                            <span class="text-primary font-bold">24</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark section-header">Get In Touch</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Have questions about our platform? Reach out to our team for more information.
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-gray-50 rounded-xl shadow-lg overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-8 bg-gradient-to-br from-primary to-secondary text-white">
+                        <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-map-marker-alt mt-1 mr-3 text-xl"></i>
+                                <div>
+                                    <h4 class="font-semibold">Address</h4>
+                                    <p class="opacity-90">123 Food Street, Culinary City</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-phone-alt mt-1 mr-3 text-xl"></i>
+                                <div>
+                                    <h4 class="font-semibold">Phone</h4>
+                                    <p class="opacity-90">+1 (555) 123-4567</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-envelope mt-1 mr-3 text-xl"></i>
+                                <div>
+                                    <h4 class="font-semibold">Email</h4>
+                                    <p class="opacity-90">info@fooddeliver.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-semibold mb-4">Follow Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8">
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Name</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Email">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Subject</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Subject">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Message</label>
+                                <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Message"></textarea>
+                            </div>
+                            <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-utensils text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-bold">FoodDeliver</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        The complete solution for modern food delivery businesses.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><button onclick="showPage('home')" class="text-gray-400 hover:text-white transition">Home</button></li>
+                        <li><button onclick="showPage('features')" class="text-gray-400 hover:text-white transition">Features</button></li>
+                        <li><button onclick="showPage('modules')" class="text-gray-400 hover:text-white transition">Modules</button></li>
+                        <li><button onclick="showPage('pricing')" class="text-gray-400 hover:text-white transition">Pricing</button></li>
+                        <li><button onclick="showPage('testimonials')" class="text-gray-400 hover:text-white transition">Testimonials</button></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Restaurant Management</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Delivery Tracking</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Order Processing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Analytics Dashboard</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Mobile App</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to get updates and offers</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your Email" class="px-4 py-2 w-full rounded-l-lg focus:outline-none text-dark">
+                        <button class="bg-primary px-4 py-2 rounded-r-lg hover:bg-green-700 transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 FoodDeliver. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page navigation functionality
+        function showPage(pageId) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show the requested page
+            const page = document.getElementById(pageId);
+            if (page) {
+                page.classList.remove('hidden');
+            } else {
+                document.getElementById('home').classList.remove('hidden');
+            }
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-page');
+            });
+            // Find the clicked button and set it as active
+            if (event && event.target) {
+                const clickedButton = event.target.closest('.nav-link');
+                if (clickedButton) {
+                    clickedButton.classList.add('active-page');
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Toggle mobile menu with animation
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const menuButton = document.querySelector('.menu-button');
+            
+            mobileMenu.classList.toggle('active');
+            menuButton.classList.toggle('active');
+        }
+        
+        // Password visibility toggle
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            const icon = input.nextElementSibling.querySelector('i');
+            if (type === 'password') {
+                icon.className = 'fas fa-eye';
+            } else {
+                icon.className = 'fas fa-eye-slash';
+            }
+        }
+        
+        // Form validation and submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            const email = document.getElementById('login-email');
+            const password = document.getElementById('login-password');
+            const emailError = document.getElementById('login-email-error');
+            const passwordError = document.getElementById('login-password-error');
+            
+            // Reset error messages
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (password.value.length < 6) {
+                passwordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                alert('Login successful!');
+                // In a real app, this would submit to a server
+                email.value = '';
+                password.value = '';
+            }
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            const name = document.getElementById('register-name');
+            const email = document.getElementById('register-email');
+            const password = document.getElementById('register-password');
+            const confirmPassword = document.getElementById('register-confirm-password');
+            const nameError = document.getElementById('register-name-error');
+            const emailError = document.getElementById('register-email-error');
+            const passwordError = document.getElementById('register-password-error');
+            const confirmPasswordError = document.getElementById('register-confirm-password-error');
+            
+            // Reset error messages
+            nameError.style.display = 'none';
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            confirmPasswordError.style.display = 'none';
+            
+            // Validate name
+            if (name.value.trim() === '') {
+                nameError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (password.value.length < 6) {
+                passwordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate confirm password
+            if (password.value !== confirmPassword.value) {
+                confirmPasswordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                alert('Registration successful! Welcome to FoodDeliver.');
+                // In a real app, this would submit to a server
+                name.value = '';
+                email.value = '';
+                password.value = '';
+                confirmPassword.value = '';
+            }
+        });
+        
+        // Custom pricing form functionality
+        document.getElementById('monthlyOrders').addEventListener('input', function() {
+            const value = this.value;
+            document.getElementById('ordersDisplay').textContent = value + ' orders/month';
+        });
+        
+        document.getElementById('customPricingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you! We will contact you shortly with a custom pricing quote.');
+            // Reset form
+            this.reset();
+            document.getElementById('ordersDisplay').textContent = '0 orders/month';
+        });
+        
+        // Initialize with home page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide all sections except home
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById('home').classList.remove('hidden');
+            
+            // Set up smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
